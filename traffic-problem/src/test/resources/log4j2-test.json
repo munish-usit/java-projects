@@ -25,8 +25,8 @@
             },
 			"RollingFile": {
 				"name": "RollingFile-Appender",
-				"fileName": "${log-path}/traffic.log",
-				"filePattern": "${archive}/traffic.log.%d{yyyy-MM-dd-hh-mm}.gz",
+				"fileName": "${log-path}/traffic-test.log",
+				"filePattern": "${archive}/traffic-test.log.%d{yyyy-MM-dd-hh-mm}.gz",
 				"PatternLayout": {
 					"pattern": "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
 				},
@@ -43,9 +43,7 @@
         "loggers": {
 			"root": {
 				"AppenderRef": [
-					{
-					"ref": "Console"
-					},
+					
 					{
 					"ref": "RollingFile-Appender"
 					}

@@ -15,7 +15,7 @@ public enum ErrorMessages {
 	private String errorcode;
 	private String errorMessage;
 		
-	ErrorMessages(String errorCode,String errorMessage) {
+	private ErrorMessages(String errorCode,String errorMessage) {
 		this.errorcode = errorCode;
 		this.errorMessage = errorMessage;
 	}

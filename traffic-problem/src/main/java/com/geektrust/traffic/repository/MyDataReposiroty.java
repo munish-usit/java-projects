@@ -1,7 +1,13 @@
+/**
+ * This class hold reference to all data structure.
+ * All other classes can access orbit , vehicle, weather map using an instance of this class.
+ * We can add more functionality to this class by extending the Repository Interface.
+ */
 package com.geektrust.traffic.repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.geektrust.traffic.interfaces.RepositoryInterface;
 import com.geektrust.traffic.models.Orbit;
@@ -36,14 +42,14 @@ public class MyDataReposiroty implements RepositoryInterface {
 	
 	@Override
 	public List<Orbit> getAllOrbits() {
-		return GlobalMemory.instance.getAllOrbits();
+		return orbitsMap.values().stream().collect(Collectors.toList());
 	}
 	@Override
 	public List<Vehicle> getAllVehicles() {
-		return GlobalMemory.instance.getAllVehicles();
+		return vehiclesMap.values().stream().collect(Collectors.toList());
 	}
 	@Override
 	public List<Weather> getAllWeatherDetails() {
-		return GlobalMemory.instance.getAllWeatherDetails();
+		return weathersMap.values().stream().collect(Collectors.toList());
 	}
 }

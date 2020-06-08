@@ -1,3 +1,6 @@
+/**
+ * Generate output message in required format and to multiple writer
+ */
 package com.geektrust.traffic.core;
 
 import org.apache.logging.log4j.Logger;

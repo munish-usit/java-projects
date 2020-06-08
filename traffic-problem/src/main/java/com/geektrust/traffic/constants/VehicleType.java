@@ -7,7 +7,7 @@ public enum VehicleType {
 	BIKE("BIKE")
 	;
 	private String type;
-	VehicleType(String type) {
+	private VehicleType(String type) {
 		this.type = type;
 	}
 	@Override

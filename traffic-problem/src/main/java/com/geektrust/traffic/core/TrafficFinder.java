@@ -1,3 +1,7 @@
+/**
+ * Traffic finder is responsible for calculating the optimum travel time.
+ * Output is stored as TraverseDetail.
+ */
 package com.geektrust.traffic.core;
 
 import java.util.ArrayList;

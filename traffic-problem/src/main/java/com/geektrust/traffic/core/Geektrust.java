@@ -22,9 +22,9 @@ import com.geektrust.traffic.repository.GlobalMemory;
 import com.geektrust.traffic.utils.AppLogger;
 import com.geektrust.traffic.utils.Utils;
 
-public class GeekTrust {
+public class Geektrust {
 
-	private static final Logger logger = AppLogger.getMainLogInstance(GeekTrust.class);
+	private static final Logger logger = AppLogger.getMainLogInstance(Geektrust.class);
 	public static void main(String[] args) {
 
 		try {

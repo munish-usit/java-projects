@@ -1,3 +1,6 @@
+/**
+ * Utility class with utility functions like readData or validateInput
+ */
 package com.geektrust.traffic.utils;
 
 import java.io.BufferedReader;

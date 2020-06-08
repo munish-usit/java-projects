@@ -7,7 +7,7 @@ public enum OrbitType {
 	
 	private String type;
 	
-	OrbitType(String name) {
+	private OrbitType(String name) {
 		this.type = name;
 	}
 	
