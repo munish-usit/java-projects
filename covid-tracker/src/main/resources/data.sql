@@ -37,4 +37,5 @@ CREATE TABLE IF NOT EXISTS `persistent_logins` (
   PRIMARY KEY  (`series`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `test_role` VALUES (1,'ADMIN');
+/*INSERT INTO `test_role` VALUES (1,'ADMIN');
+*/

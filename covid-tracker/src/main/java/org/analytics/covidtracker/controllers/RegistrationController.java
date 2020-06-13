@@ -21,18 +21,18 @@ public class RegistrationController {
 	@Autowired
 	private UserService userService;
 	 
-	@RequestMapping(value="/registration", method = RequestMethod.GET)
+	@RequestMapping(value= {"/registration","/register"}, method = RequestMethod.GET)
 	public ModelAndView registration(){
 		logger.info("Registration request received");
 		ModelAndView modelAndView = new ModelAndView();
 		User user = new User();
 		modelAndView.addObject("user", user);
-		modelAndView.setViewName("registration");
+		modelAndView.setViewName("register");
 		logger.info("Registration request received");
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/registration", method = RequestMethod.POST)
+	@RequestMapping(value = {"/registration","/register"}, method = RequestMethod.POST)
 	public ModelAndView createNewUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult) {
 		logger.info("Create new user request received for user {}",user.getEmail());
 		ModelAndView modelAndView = new ModelAndView();
@@ -43,14 +43,14 @@ public class RegistrationController {
 			logger.warn("Create new user request for user {} status {}",user.getEmail(),Messages.USER_ALREADY_EXIST);
 		}
 		if (bindingResult.hasErrors()) {
-			modelAndView.setViewName("registration");
+			modelAndView.setViewName("register");
 			logger.error("Create new user request for user {} status {}",user.getEmail(),bindingResult.getAllErrors().toString());
 			
 		} else {
 			userService.saveUser(user);
 			modelAndView.addObject("successMessage", Messages.USER_REGISTRATION_SUCCESS);
 			modelAndView.addObject("user", new User());
-			modelAndView.setViewName("registration");
+			modelAndView.setViewName("login");
 			logger.info("Create new user request for user {} status {}",user.getEmail(),Messages.USER_REGISTRATION_SUCCESS);
 
 		}

@@ -49,7 +49,7 @@ public class CoronaVirusDataService {
     		locationStat.setDiffFromPrevDay(latestCases - prevDayCases);
     		newStats.add(locationStat);
     	}
-    	this.allStats = newStats;
+    	if(newStats != null && !newStats.isEmpty()) this.allStats = newStats;
     }
 
 }
