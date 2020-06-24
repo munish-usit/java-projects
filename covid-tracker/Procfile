@@ -1,0 +1,1 @@
+web: java -jar target/covid-tracker-1.0.jar

@@ -29,7 +29,14 @@
 * 	JUnit is written using Mockito to mock MYSql Repository.
 
 
+
+##### Dependency
+* 	MySql
+*	Java 1.8
+*	Maven 3.6
+
 ##### Command to Run the application
+*   Modify jdbc url in application.properties
 * 	mvn -fn clean install
 *   java -jar covid-tracker-1.0.jar
 
