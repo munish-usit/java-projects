@@ -1,0 +1,77 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Rate Limiter.md</title><style></style></head><body id="preview">
+<h1 class="code-line" data-line-start=0 data-line-end=1><a id="Rate_Limiter_0"></a>Rate Limiter</h1>
+<p class="has-line-data" data-line-start="2" data-line-end="3"><img src="logo.png" alt="Rate Limiter"></img></p>
+<p class="has-line-data" data-line-start="4" data-line-end="5"><img src="build.png" alt="Build Status"></p>
+<h2 class="code-line" data-line-start=6 data-line-end=7><a id="Distributed_and_Inmemory_rate_limiter_java_library_6"></a>Distributed and In-memory rate limiter java library.</h2>
+<p class="has-line-data" data-line-start="7" data-line-end="8">Rate Limiter is an easy to use solution to add distributed rate limiting at the server level in your public API. This is particularly useful if multiple services are running in different JVMs.</p>
+<ul>
+<li class="has-line-data" data-line-start="9" data-line-end="10">In-memory within same JVM environment</li>
+<li class="has-line-data" data-line-start="10" data-line-end="12">Redis</li>
+</ul>
+<h1 class="code-line" data-line-start=12 data-line-end=13><a id="Problem_12"></a>Problem</h1>
+<p class="has-line-data" data-line-start="13" data-line-end="15">Off the multiple APIs that are exposed, different APIs would have different resource requirement and while some APIs are light and fast, there are subset that are heavy and increases stress on the Server. Internally it is clear the cost of every API call, however, a client building an integration could be unaware of such cost and could implement an integration which could be taxing on the server and impact the overall performance of the application.<br>
+An alternative scenario here is also a programming mistake by a client’s developer which might end up calling an API repeatedly in automated way, which could lead to simulate a DOS (Denial of Service) attack and adversely impact the performance of the application.</p>
+<h1 class="code-line" data-line-start=16 data-line-end=17><a id="Solution_16"></a>Solution:</h1>
+<ul>
+<li class="has-line-data" data-line-start="17" data-line-end="18">Token Bucket Algorithm implemented for Rate limiting.</li>
+<li class="has-line-data" data-line-start="18" data-line-end="19">Zuul Netflix as an API gateway.</li>
+</ul>
+<h2 class="code-line" data-line-start=19 data-line-end=20><a id="Token_Bucket_Algorithm_19"></a>Token Bucket Algorithm</h2>
+<p class="has-line-data" data-line-start="20" data-line-end="21">Token bucket is first initialized with maxRequest. When a request comes, a token has to be taken from the bucket for it to be processed. If there is no token available in the bucket, the request will be rejected and the requester has to retry later. The token bucket is also refilled per time unit.</p>
+<p class="has-line-data" data-line-start="22" data-line-end="23">In this way, we can limit the requests per user per time unit by assigning a bucket with fixed amount of tokens to each user. When a user uses up all the tokens in a time period, we know that he has exceeded the limit and reject his requests until his bucket is refilled.</p>
+<h3 class="code-line" data-line-start=24 data-line-end=25><a id="Inmemory_implementaion_24"></a>In-memory implementaion</h3>
+<p class="has-line-data" data-line-start="25" data-line-end="26">Token bucket information like current number of tokens available, last bucket refill time, max tokens and time unit is stored inside JVM process.</p>
+<h3 class="code-line" data-line-start=27 data-line-end=28><a id="Redis_27"></a>Redis</h3>
+<p class="has-line-data" data-line-start="28" data-line-end="31">Redis hash is used to store Token bucket information like current number of tokens available, last bucket refill time, max tokens and time unit.<br>
+Each time a request comes, data is fetched from redis and then saved back to the redis.<br>
+Redis approach can be used in a multi-server environment.</p>
+<h2 class="code-line" data-line-start=32 data-line-end=33><a id="Zuul_Netflix_for_API_Gateway_32"></a>Zuul Netflix for API Gateway</h2>
+<p class="has-line-data" data-line-start="33" data-line-end="34">Zuul netflix act as an API gateway in front of the application server. Request will first come to the API Gateway, it will check for rate limiting service for all the request and depending on the output of the rate limiting service, the request will be rejected or passed to the application server.</p>
+<h2 class="code-line" data-line-start=34 data-line-end=35><a id="Sequence_Diagram_34"></a>Sequence Diagram</h2>
+<p class="has-line-data" data-line-start="35" data-line-end="36"><img src="sequence.png" alt="Sequence Diagram"></p>
+<h2 class="code-line" data-line-start=34 data-line-end=35><a id="Architecture"></a>Sequence Diagram</h2>
+<p class="has-line-data" data-line-start="35" data-line-end="36"><img src="architecture.png" alt="Sequence Diagram"></p>
+<h3 class="code-line" data-line-start=38 data-line-end=39><a id="Tech_38"></a>Tech</h3>
+<p class="has-line-data" data-line-start="40" data-line-end="41">Rate limiter uses spring-boot framework.</p>
+<ul>
+<li class="has-line-data" data-line-start="42" data-line-end="43">Spring boot 2.3.3.RELEASE</li>
+<li class="has-line-data" data-line-start="43" data-line-end="44">Java 1.8</li>
+<li class="has-line-data" data-line-start="44" data-line-end="45">Redis Server (free cloud instance)</li>
+<li class="has-line-data" data-line-start="45" data-line-end="46">Jedis</li>
+<li class="has-line-data" data-line-start="46" data-line-end="48">Spring cloud Greenwich.RELEASE</li>
+</ul>
+<h3 class="code-line" data-line-start=48 data-line-end=49><a id="Configuration_48"></a>Configuration</h3>
+<pre><code class="has-line-data" data-line-start="50" data-line-end="54" class="language-sh">[zuul.routes.course-api.url=http://localhost:<span class="hljs-number">8080</span>] to redirect request.
+[rate.limit.disabled=<span class="hljs-literal">false</span>] <span class="hljs-built_in">disable</span>, <span class="hljs-built_in">enable</span> rate limiter
+[rate.limit.type=TokenBucket] change rate limiter implementation
+</code></pre>
+<h3 class="code-line" data-line-start=55 data-line-end=56><a id="Installation_55"></a>Installation</h3>
+<pre><code class="has-line-data" data-line-start="57" data-line-end="60" class="language-sh">$ mvn -fn clean install
+$ java -jar ratelimiter-<span class="hljs-number">1.0</span>.jar
+</code></pre>
+<h3 class="code-line" data-line-start=61 data-line-end=62><a id="Assumptions_61"></a>Assumptions</h3>
+<pre><code class="has-line-data" data-line-start="63" data-line-end="66" class="language-sh">user-id <span class="hljs-keyword">in</span> request header to identify the user.
+request-id <span class="hljs-keyword">in</span> request header to identify the request.
+</code></pre>
+<h3 class="code-line" data-line-start=66 data-line-end=67><a id="Configure_Rate_Limits_per_user_and_per_API_66"></a>Configure Rate Limits per user and per API</h3>
+<pre><code class="has-line-data" data-line-start="68" data-line-end="75" class="language-sh">POST Request http://localhost:<span class="hljs-number">8085</span>/ratelimit/tokenbucket.
+{
+        <span class="hljs-string">"id"</span>: <span class="hljs-string">"user1-developer"</span>,
+        <span class="hljs-string">"maxRequest"</span>: <span class="hljs-number">10</span>,
+        <span class="hljs-string">"timeunit"</span>:<span class="hljs-string">"seconds"</span>
+}
+</code></pre>
+<h3 class="code-line" data-line-start=76 data-line-end=77><a id="Usage_76"></a>Usage</h3>
+<pre><code class="has-line-data" data-line-start="78" data-line-end="82" class="language-sh">Modify [zuul.routes.course-api.url=http://localhost:<span class="hljs-number">8080</span>] <span class="hljs-keyword">in</span> the application properties.
+Example [RateLimiter]http://localhost:<span class="hljs-number">8085</span>/course-api/hello -&gt; redirected to [Application Server]http://localhost:<span class="hljs-number">8080</span>/hello
+Use browser to hit multiple requests.
+[Optional] Modify redis server properties in the applicaiton.properties. Currently using redis cloud instance with limited memory.
+</code></pre>
+<h3 class="code-line" data-line-start=83 data-line-end=84><a id="Todos_83"></a>Todos</h3>
+<ul>
+<li class="has-line-data" data-line-start="84" data-line-end="85">Add Sliding Window implementation</li>
+<li class="has-line-data" data-line-start="85" data-line-end="87">Optimize locking mechanism in TokenBucketRedisRateLimiter implementation.</li>
+</ul>
+<h3 class="code-line" data-line-start=87 data-line-end=88><a id="License_87"></a>License</h3>
+<p class="has-line-data" data-line-start="89" data-line-end="90"><strong>Free Software</strong></p>
+</body></html>
